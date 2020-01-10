@@ -1,0 +1,150 @@
+{
+  "c25_Banner": {
+    "configuration": { "marginBottom": 5 },
+    "picture": {
+      "imageSrc": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-banner-xs_datejust-36_det_rolesor-32199_isov2_300_rvb.jpg",
+      "imageAlt": "",
+      "lazyLoading": false
+    },
+    "overlay": false,
+    "height": "xs",
+    "width": "xxl"
+  },
+  "a64_TextBlock": {
+    "configuration": { "marginBottom": 10 },
+    "title": "Rolex Watches",
+    "text": "Rolex watches are crafted from the finest raw materials and assembled with scrupulous attention to detail. Every component is designed, developed and produced to the most exacting standards.",
+    "align": "center",
+    "textHeading": "h1",
+    "textWidth": "s"
+  },
+  "h54_WatchGrid": {
+    "configuration": { "marginBottom": 22 },
+    "titleOnly": true,
+    "toFamilyPage": true,
+    "rmcList": [
+      "m228238-0042",
+      "m326935-0007",
+      "m126333-0010",
+      "m279381rbr-0013",
+      "m86409rbr-0001",
+      "m114300-0004",
+      "m116900-0001",
+      "m116503-0004",
+      "m116613lb-0005",
+      "m126603-0001",
+      "m126715chnr-0001",
+      "m226659-0002",
+      "m216570-0001",
+      "m116400gv-0002",
+      "m50535-0002"
+    ]
+  },
+  "j92_EditorialGrid": {
+    "title": "Featured selections",
+    "cards": [
+      {
+        "isAnimated": false,
+        "title": "Title of Card",
+        "subtitle": "",
+        "image": {
+          "imageSrc": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-mens-watches_sky_dweller_m326934-0003_17tl_316_ok.jpg",
+          "imageAlt": "test alt",
+          "imageMap": {
+            "0": {
+              "standard": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-mens-watches_sky_dweller_m326934-0003_17tl_316_ok_portrait.jpg"
+            },
+            "1069": {
+              "standard": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-mens-watches_sky_dweller_m326934-0003_17tl_316_ok.jpg"
+            }
+          }
+        },
+        "labelMore": "Discover more",
+        "componentDisplay": "EditoCard",
+        "linkCard": {
+          "to": "/watches",
+          "title": "Discover more"
+        }
+      },
+      {
+        "isAnimated": false,
+        "title": "Title of Card",
+        "subtitle": "",
+        "image": {
+          "imageSrc": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-womens-watches_pearlmaster_39_m86289-0001-18tl-2078_ok.jpg",
+          "imageAlt": "test alt",
+          "caption": "test caption",
+          "imageMap": {
+            "0": {
+              "standard": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-womens-watches_pearlmaster_39_m86289-0001-18tl-2078_ok_portrait.jpg"
+            },
+            "1069": {
+              "standard": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-womens-watches_pearlmaster_39_m86289-0001-18tl-2078_ok.jpg"
+            }
+          }
+        },
+        "labelMore": "Discover more",
+        "componentDisplay": "EditoCard",
+        "linkCard": {
+          "to": "/watches",
+          "title": "Discover more"
+        }
+      }
+    ]
+  },
+  "j94_EditorialGrid": {
+    "configuration": { "marginBottom": 20 },
+    "title": "",
+    "cards": [
+      {
+        "isAnimated": false,
+        "title": "Title of Card",
+        "subtitle": "",
+        "image": {
+          "imageSrc": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-gold-watches_rolex_tiges_evr_o5a6277.jpg",
+          "imageAlt": "test alt",
+          "caption": "test caption",
+          "imageMap": {
+            "0": {
+              "standard": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-gold-watches_rolex_tiges_evr_o5a6277_portrait.jpg"
+            },
+            "1069": {
+              "standard": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-gold-watches_rolex_tiges_evr_o5a6277.jpg"
+            }
+          }
+        },
+        "labelMore": "Discover more",
+        "componentDisplay": "EditoCard",
+        "linkCard": {
+          "to": "/watches",
+          "title": "Discover more"
+        }
+      }
+    ]
+  },
+  "f54_Banner": {
+    "configuration": { "marginBottom": 3 },
+    "picture": {
+      "imageSrc": "https://content.rlx-uat.com/dam/corners/homepage/corners-homepage-experience-a-rolex.jpg",
+      "imageAlt": "",
+      "lazyLoading": false
+    },
+    "overlay": false,
+    "width": "s"
+  },
+  "g34_TextBlock": {
+    "configuration": { "marginBottom": 20 },
+    "title": "Experience a rolex",
+    "text": "Nothing beats experiencing first-hand the meticulous details, the balanced weight, the comfort and simply the feel of a Rolex watch. Visit us at Zegg & Cerlati and we will guide you through the range of Rolex models, and advise you on the technical aspects of Rolex watches to help you find the watch that was made for you.",
+    "align": "center",
+    "textHeading": "h1",
+    "textWidth": "s",
+    "ctaList": [
+      {
+        "theme": "beta",
+        "label": "Contact us",
+        "to": "/contact"
+      }
+    ]
+  }
+}
