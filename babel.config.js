@@ -9,7 +9,8 @@ module.exports = function (api) {
       "@babel/plugin-transform-object-assign",
       "@babel/plugin-proposal-object-rest-spread",
       "@babel/plugin-proposal-optional-chaining",
-      "@babel/plugin-syntax-dynamic-import"
+      "@babel/plugin-syntax-dynamic-import",
+      "babel-plugin-styled-components"
     ]
   };
 }

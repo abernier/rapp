@@ -1,7 +1,6 @@
 import React, { StrictMode, useEffect } from "react"
 import { Helmet } from "react-helmet"
 import styled from "styled-components"
-import {} from "react-router-dom"
 import { FormattedMessage } from "react-intl"
 
 import { Switch, Route, NavLink } from "react-router-dom"
@@ -9,27 +8,9 @@ import { Switch, Route, NavLink } from "react-router-dom"
 import I18n, { useI18n } from "./i18n.js"
 import Theme, { useTheme, themes } from "./Theme.js"
 
-import Homepage from "./pages/Homepage"
-import About from "./pages/About"
-
 import NotFound from "./NotFound"
 
-const pages = {
-  homepage: {
-    route: {
-      path: "/",
-      exact: true,
-      component: Homepage
-    }
-  },
-  about: {
-    route: {
-      path: "/about",
-      exact: true,
-      component: About
-    }
-  }
-}
+import routes from "./routes.js"
 
 function LangSwitcher(props) {
   const [{ fetching, locale }, i18nDispatch] = useI18n()
@@ -65,13 +46,14 @@ function ThemeSwitcher(props) {
   const [{ name }, themeDispatch] = useTheme()
 
   return (
-    <div className='ThemeSwitcher'>
+    <div className="ThemeSwitcher">
       <p>
         <select
           defaultValue={name}
           onChange={e => {
             themeDispatch({ type: "CHANGE_THEME", value: e.target.value })
-          }}>
+          }}
+        >
           {themes.map(theme => (
             <option key={theme} value={theme}>
               {theme}
@@ -84,40 +66,50 @@ function ThemeSwitcher(props) {
 }
 
 function Layout(props) {
-  const [{fetching}, i18nDispatch] = useI18n();
-  const [{name: themename}] = useTheme();
+  const [{ fetching }, i18nDispatch] = useI18n()
+  const [{ name: themename }] = useTheme()
 
   const StyledDiv = styled.div`
-  min-height:100vh; overflow:hidden;
-  padding:8px;
+    min-height: 100vh;
+    overflow: hidden;
+    padding: 8px;
 
-  &.theme-light {background:#fefefe; color:#666;;}
-  &.theme-dark {background:#607D8B; color:#fff;}
-  `;
+    &.theme-light {
+      background: #fefefe;
+      color: #666;
+    }
+    &.theme-dark {
+      background: #607d8b;
+      color: #fff;
+    }
+  `
 
   return (
-    <StyledDiv className={`App theme-${themename}`} style={{fontFamily: (fetching ? 'flow' : 'inherit')}}>
+    <StyledDiv
+      className={`App theme-${themename}`}
+      style={{ fontFamily: fetching ? "flow" : "inherit" }}
+    >
       <LangSwitcher />
       <ThemeSwitcher />
 
       {/* nav */}
       <nav>
-        {Object.keys(pages).map((pagename) => {
-          const page = pages[pagename];
-          const route = page.route;
+        {Object.keys(routes).map(pagename => {
+          const page = routes[pagename]
+          const route = page.route
 
           return (
-            <NavLink key={route.path} to={route.path} exact={route.exact}>{pagename}</NavLink>
-          );
+            <NavLink key={route.path} to={route.path} exact={route.exact}>
+              {pagename}
+            </NavLink>
+          )
         })}
         <NavLink to="/nowhere">404</NavLink>
       </nav>
 
       {props.children}
-
-      
     </StyledDiv>
-  );
+  )
 }
 
 function Page(props) {
@@ -126,7 +118,7 @@ function Page(props) {
   const { pagename, Component, routepath } = props
 
   // I18n patching datas
-  const { data } = Component
+  const { data } = Component // data are attached to the page's component
   if (!!data)
     Object.keys(data).forEach(function(componentName) {
       patch(data[componentName], `${pagename}.${componentName}.`)
@@ -143,62 +135,56 @@ function Page(props) {
 }
 
 function App(props) {
-  const [page, setPage] = React.useState(null)
-
-  console.log("REACT_APP_FOO", process.env.REACT_APP_FOO)
+  // console.log("REACT_APP_FOO", process.env.REACT_APP_FOO)
 
   return (
     <>
       <StrictMode>
-      <I18n lang={navigator.language.split(/[-_]/)[0]}>
-      <Theme>
-        <Switch>
+        <I18n {...props.i18n}>
+          <Theme>
+            <Switch>
+              {/* One <Route> per page */}
+              {Object.keys(routes).map(pagename => {
+                const { route } = routes[pagename]
 
-          {/* One <Route> per page */}
-          {Object.keys(pages).map(pagename => {
-            const { route } = pages[pagename]
+                return (
+                  <Route
+                    key={route.path}
+                    path={route.path}
+                    exact={route.exact}
+                    render={routerProps => {
+                      return (
+                        <Layout>
+                          <Page
+                            pagename={pagename}
+                            Component={route.component}
+                            routepath={route.path}
+                          />
+                        </Layout>
+                      )
+                    }}
+                  />
+                )
+              })}
 
-            return (
+              {/* last route, ie: 404 */}
               <Route
-                key={route.path}
-                path={route.path}
-                exact={route.exact}
-                render={match => {
-                  setPage(pagename)
-
+                render={routerProps => {
                   return (
-                    <Layout>
-                      <Page
-                        pagename={pagename}
-                        Component={route.component}
-                        routepath={route.path}
-                      />
-                    </Layout>
+                    <>
+                      <Layout>
+                        <Helmet>
+                          <title>404</title>
+                        </Helmet>
+                        <NotFound />
+                      </Layout>
+                    </>
                   )
                 }}
               />
-            )
-          })}
-
-          {/* last route, ie: 404 */}
-          <Route
-            render={() => {
-              setPage("notFound")
-              return (
-                <>
-                  <Layout>
-                    <Helmet>
-                      <title>404</title>
-                    </Helmet>
-                    <NotFound />
-                  </Layout>
-                </>
-              )
-            }}
-          />
-        </Switch>
-      </Theme>
-      </I18n>
+            </Switch>
+          </Theme>
+        </I18n>
       </StrictMode>
     </>
   )

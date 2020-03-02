@@ -1,31 +1,41 @@
 import React from "react"
 import { createIntl, createIntlCache, RawIntlProvider } from "react-intl"
+import fetch from "isomorphic-fetch"
 
 import get from "lodash.get"
 import set from "lodash.set"
 
 const I18nContext = React.createContext()
 
+// https://stackoverflow.com/questions/53179075/with-useeffect-how-can-i-skip-applying-an-effect-upon-the-initial-render
+function useDidMount() {
+  const didMountRef = React.useRef(false)
+  React.useEffect(() => {
+    didMountRef.current = true
+  }, [])
+
+  return didMountRef.current
+}
+
 function reducer(state, action) {
   switch (action.type) {
     case "CHANGE_LOCALE":
       return {
         ...state,
-        locale: action.locale,
-        messages: {}
-      }
-    case "ADD_MESSAGES":
-      return {
-        ...state,
-        messages: {
-          ...state.messages,
-          ...action.messages
-        }
+        locale: action.locale
+        //messages: {}
       }
     case "FETCH_START":
       return { ...state, fetching: true }
     case "FETCH_DONE":
-      return { ...state, fetching: false }
+      return {
+        ...state,
+        messages: {
+          ...state.messages,
+          ...action.messages // merge with old dictionnary (same keys will be overwitten)
+        },
+        fetching: false
+      }
     default:
       throw new Error(`This action: ${action.type} is not supported`)
   }
@@ -33,9 +43,11 @@ function reducer(state, action) {
 
 // A component that wraps children and allow them to consume the same reducer (complex state)
 function I18nContextProvider(props) {
+  const didMount = useDidMount()
+
   const [state, dispatch] = React.useReducer(reducer, {
     locale: props.lang || "en",
-    messages: {},
+    messages: props.messages || {},
     fetching: false
   })
 
@@ -56,33 +68,29 @@ function I18nContextProvider(props) {
   React.useEffect(() => {
     let didCancel = false // prevent setting state if unmounted (see: https://www.robinwieruch.de/react-hooks-fetch-data#abort-data-fetching-in-effect-hook)
 
-    console.log("[I18n] useEffect: `state.locale` has changed value")
+    if (!didMount) {
+      // do not fetch on mount
+    } else {
+      if (locale && !didCancel) {
+        console.log("[I18n] useEffect: `state.locale` has changed value")
 
-    if (!locale) {
-      console.warn("`locale` is not a thing", locale)
-      return // do not fetch
+        const url = `/locales/${locale}.json`
+        console.log(`[I18n] fetching all messages from '${url}'...`)
+
+        dispatch({ type: "FETCH_START" })
+        fetch(url)
+          .then(res => res.json())
+          .then(data => {
+            console.log("[I18n] fetched!", data)
+
+            dispatch({ type: "FETCH_DONE", messages: data })
+          })
+          .catch(er => {
+            dispatch({ type: "FETCH_DONE" })
+            throw er
+          })
+      }
     }
-
-    const url = `/locales/${locale}.json`
-    console.log(`[I18n] fetching all messages from '${url}'...`)
-
-    dispatch({ type: "FETCH_START" })
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        console.log("[I18n] fetched!", data)
-
-        if (!didCancel) {
-          dispatch({ type: "ADD_MESSAGES", messages: data })
-          dispatch({ type: "FETCH_DONE" })
-        }
-      })
-      .catch(er => {
-        if (!didCancel) {
-          dispatch({ type: "FETCH_DONE" })
-          throw er
-        }
-      })
 
     return () => {
       didCancel = true
